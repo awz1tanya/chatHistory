@@ -118,7 +118,9 @@ Return ONLY the best-fit image tag as plain text.
 
     return jsonify({
         "reply": reply_text,
-        "image_tag": image_tag
+        "image_tag": image_tag,
+        "prompt": prompt,
+        "tag_prompt": tag_prompt
     })
 
 if __name__ == '__main__':
