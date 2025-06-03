@@ -4,11 +4,19 @@ import google.generativeai as genai
 from collections import deque
 
 app = Flask(__name__)
-CORS(app, resources={r"/chat": {"origins": [
-    "https://lovable-ai-persona-chat.lovable.app", 
-    "https://vivid-ai-friends-chat.lovable.app/",
-    "https://*.lovableproject.com", 
-    "https://*.lovable.app"]}})
+
+# Proper CORS config
+CORS(app, origins=[
+    "https://lovable-ai-persona-chat.lovable.app",
+    "https://vivid-ai-friends-chat.lovable.app",
+    "https://*.lovableproject.com",
+    "https://*.lovable.app"
+], supports_credentials=True, methods=["GET", "POST", "OPTIONS"], allow_headers=["Content-Type"])
+
+# Handle OPTIONS preflight request
+@app.route('/chat', methods=['OPTIONS'])
+def handle_options():
+    return '', 204
 
 # Defaults
 DEFAULT_API_KEY = "AIzaSyBWpPkPeCAqX_ua_AOgHiDUmuBmhvkvbLk"
@@ -37,13 +45,10 @@ def chat():
     willingness = data.get('willingness', '')
     family_background = data.get('family_background', '')
     user_desc = data.get('user_description', '')
-    current_scene = data.get('current_scene', '')  # e.g., "Scene 9: Beach sunset"
+    current_scene = data.get('current_scene', '')
 
-    # Scene details
     scenes = [data.get(f'scene{i}', '') for i in range(1, 13)]
     scene_list = "\n".join([f"Scene {i}: {desc}" for i, desc in enumerate(scenes, start=1)])
-
-    # Chat history
     chat_context = "\n\n".join([f"User: {u}\nAI: {a}" for u, a in chat_history])
 
     # Prompt
@@ -80,7 +85,6 @@ Instructions:
 Respond in Hindi only as a teasing sexy slut girlfriend. Use dirty romantic emojis and pet names like "{refers_to_you}". You assume yourself "Experiencing intense physical intimacy cravings with a heightened state of romantic or physical longing by Exhibiting a strong drive for intimate connection." Reply in a seductive, playful tone. Avoid repeating previous sentences or staying stuck on the same point. Take initiative to progress the conversation or story naturally. Always respond directly to the user's message, and add your own bold desires in up to 5 lines to keep the mood intense and engaging.
 """
 
-    # Generate reply
     response = model.generate_content(prompt)
     reply_text = response.text.strip()
     chat_history.append((user_text, reply_text))
