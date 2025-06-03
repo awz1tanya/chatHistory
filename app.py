@@ -5,7 +5,7 @@ from collections import deque
 
 app = Flask(__name__)
 CORS(app, resources={r"/chat": {"origins": [
-    "https://lovable-ai-persona-chat.lovable.app","https://chathistory-6ja2.onrender.com/chat",
+    "https://lovable-ai-persona-chat.lovable.app","https://vivid-ai-friends-chat.lovable.app/",
     "https://*.lovableproject.com",
     "https://*.lovable.app"]}})
 
