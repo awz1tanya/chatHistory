@@ -21,7 +21,7 @@ def handle_options():
 # Defaults
 DEFAULT_API_KEY = "AIzaSyBWpPkPeCAqX_ua_AOgHiDUmuBmhvkvbLk"
 DEFAULT_MODEL = "models/gemini-1.5-flash-latest"
-chat_history = deque(maxlen=5)
+chat_history = deque(maxlen=2)
 
 @app.route('/chat', methods=['POST'])
 def chat():
